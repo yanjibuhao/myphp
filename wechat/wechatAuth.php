@@ -4,9 +4,9 @@
 //微信帐号配置
 	static function wechatConfig(){
 		$result=array(
-			"appid"=>"wxfb36d1864e01e934",
-			"secret"=>"0d5890091599d8827044d263dd367aa4",
-			"redirect_uri"=>"http://www.chuangxs.com/",
+			"appid"=>"test",
+			"secret"=>"test",
+			"redirect_uri"=>"test",
 			"response_type"=>"code",
 			"grant_type"=>"authorization_code",
 			"scope"=> "snsapi_userinfo",
