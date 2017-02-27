@@ -1,5 +1,5 @@
 <?php
-class Tools_String {
+
 	
 	/**
 	 * email地址替换为星号
@@ -655,4 +655,4 @@ public function pure_or_mix($sentence,$encoding='utf-8'){
         return (float)sprintf('%.0f',(floatval($t1)+floatval($t2))*1000);
     }
 
-}
+
