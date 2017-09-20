@@ -1,6 +1,6 @@
 <?php
 
-	//头部自主定义classname
+	//头部自主定义className
 	/**
 	 * email地址替换为星号
 	 */
