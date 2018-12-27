@@ -1,0 +1,102 @@
+<body class="active-year-body">
+    <div class="active-top">
+        <a href="/" class="active-top-back" ></a>
+        <div class="active-top-title">订单详情</div>
+    </div>
+    <div class="active-order-li" style="margin-top: .52rem">
+        <div class="active-order-li-l">会员卡名称</div>
+        <div class="active-order-li-r"><?php echo $this->buyConfig['name']?></div>
+    </div>
+    <div class="active-order-li">
+        <div class="active-order-li-l">价格</div>
+        <div class="active-order-li-r">￥ <?php echo $this->buyConfig['money']?></div>
+    </div>
+
+    <div class="active-year-pay-out">
+        <div class="active-year-pay-l">支付金额：¥<?php echo $this->buyConfig['money']?></div>
+        <a payhc href="" class="active-year-pay-a">确认支付</a>
+    </div>
+</body>
+
+
+<script>
+    // $('.hc-fukuang').click(function(event) {
+    //      event.preventDefault();
+    //      var data = getFormJson('.hc-fukuang');
+    //      var url = '/pay/pay';
+    //      ajaxPost(url,data);
+    //  });
+    $('[payhc]').click(function(event) {
+
+        event.preventDefault();
+        //var data = getFormJson('.hc-fukuang');
+        var url = '/pay/pay';
+        ajaxPost(url);
+    })
+    function ajaxPost($url){
+        var number=parseInt($("#shuliang").text());
+        //console.log($data);
+        // alert($data);
+        $.ajax({
+            type: "POST",
+            url: $url,
+            data: {"type":<?php $this->type?>},
+            dataType:"json",
+            timeout:5000,
+            beforeSend:function(){
+                showii();
+            },
+            success: function(data){
+                // alert(data);
+                if(data.status==1){
+//                  alert(1);
+                    pay(data.jsApi);
+                }else{
+                    layer.msg(data.msg, {time: 1500 });
+                }
+            },
+            complete:function(data){
+                closeii();
+            }
+        });
+    }
+    function pay(jsApi){
+        WeixinJSBridge.invoke("getBrandWCPayRequest", JSON.parse(jsApi), function (res) {
+            WeixinJSBridge.log(res.err_msg);
+            if (res.err_msg == "get_brand_wcpay_request:ok") {
+                layer.msg('支付成功！', {time: 2000},function(){window.location.href = '/product/yearpaysuccess?type=2'});
+            } else {
+                if (res.err_msg == "get_brand_wcpay_request:cancel") {
+                    var err_msg = "您取消了支付";
+                } else if (res.err_msg == "get_brand_wcpay_request:fail") {
+                    var err_msg = "支付失败,错误信息：" + res.err_desc;
+                } else {
+                    var err_msg = res.err_msg + "<br/>" + res.err_desc;
+                }
+                layer.msg(err_msg, {time: 2000},function(){window.location.href = '/product/yearpaysuccess?type=2'});
+            }
+        });
+    }
+
+    function getFormJson(frm) {
+        var o = {};
+        var a = $(frm).serializeArray();
+        $.each(a, function () {
+            if (o[this.name] !== undefined) {
+                if (!o[this.name].push) {
+                    o[this.name] = [o[this.name]];
+                }
+                o[this.name].push(this.value || '');
+            } else {
+                o[this.name] = this.value || '';
+            }
+        });
+        return o;
+    }
+    function showii(){
+        ii = layer.msg('加载中...',{time:12000});
+    }
+    function closeii(){
+        layer.close(ii);
+    }
+</script>
